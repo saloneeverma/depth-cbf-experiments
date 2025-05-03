@@ -2,6 +2,7 @@ import CalSim as cs
 import numpy as np
 from controllers.force_controllers import *
 from trajectories import *
+import matplotlib.pyplot as plt
 
 #system initial condition
 pos0 = np.array([[0, 0, 1]]).T
@@ -23,6 +24,8 @@ obstacleManager = cs.ObstacleManager(qObs, rObs, NumObs = 2)
 
 #create a depth camera
 depthManager = cs.DepthCamManager(observerManager, obstacleManager, mean = None, sd = None)
+print(depthManager.get_depth_cam_i(0).calc_ptcloud_world())
+print(depthManager.get_depth_cam_i(0).calc_ptcloud_world().shape)
 
 #create a trajectory
 xD = np.vstack((np.array([[0, 2, 1.5]]).T, R0, omega0, vel0))
@@ -36,4 +39,23 @@ env = cs.Environment(dynamics, controllerManager, observerManager, obstacleManag
 env.reset()
 
 #run the simulation
-env.run()
+anim = env.run()
+env.visualize()
+
+#position = xData[0:3, :]
+#velocity = xData[15:, :]
+velocity = anim[0][15:, :]
+print(velocity.shape)
+print(velocity)
+print(anim[0][0:3, :].T)
+
+
+# print(anim)
+# print(anim[0])
+
+#Possible trajectory
+# print(anim[1])
+
+#Possible timesteps
+# print(anim[2])
+# print(anim[2])
